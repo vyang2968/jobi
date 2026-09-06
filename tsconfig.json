@@ -1,27 +1,23 @@
 {
 	"compilerOptions": {
-		/* Base Options: */
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"target": "es2024",
+		"target": "ES2022",
 		"verbatimModuleSyntax": false,
 		"allowJs": true,
 		"resolveJsonModule": true,
 		"moduleDetection": "force",
-		/* Strictness */
 		"strict": true,
 		"noUncheckedIndexedAccess": true,
-		/* If NOT transpiling with TypeScript: */
 		"moduleResolution": "Bundler",
-		"module": "es2022",
+		"module": "ESNext",
 		"noEmit": true,
-		"lib": ["es2024"],
-		"types": [
-			"./worker-configuration.d.ts",
-			"@types/node",
-			"node"
-		]
+		"jsx": "react-jsx",
+		"lib": ["DOM", "DOM.Iterable", "ES2022"],
+		"isolatedModules": true,
+		"forceConsistentCasingInFileNames": true,
+		"types": ["./worker-configuration.d.ts", "@types/node", "node"]
 	},
-	"exclude": ["node_modules", "dist", "tests"],
-	"include": ["src", "worker-configuration.d.ts"]
+	"exclude": ["node_modules", "dist", "tests", ".output"],
+	"include": ["src", "worker-configuration.d.ts", "vite.config.ts"]
 }

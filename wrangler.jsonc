@@ -5,8 +5,9 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "jobi",
-  "main": "src/index.ts",
-  "compatibility_date": "2026-08-15",
+  "main": "src/server.ts",
+  "compatibility_date": "2026-09-06",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true,
   },
