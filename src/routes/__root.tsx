@@ -1,4 +1,6 @@
+/// <reference types="vite/client" />
 import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router";
+import appCss from "~/styles/app.css?url";
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -14,6 +16,7 @@ export const Route = createRootRoute({
 				title: "Jobi",
 			},
 		],
+		links: [{ rel: "stylesheet", href: appCss }],
 	}),
 	shellComponent: RootDocument,
 });

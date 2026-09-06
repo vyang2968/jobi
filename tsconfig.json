@@ -16,7 +16,10 @@
 		"lib": ["DOM", "DOM.Iterable", "ES2022"],
 		"isolatedModules": true,
 		"forceConsistentCasingInFileNames": true,
-		"types": ["./worker-configuration.d.ts", "@types/node", "node"]
+		"types": ["./worker-configuration.d.ts", "@types/node", "node"],
+		"paths": {
+			"~/*": ["./src/*"]
+		}
 	},
 	"exclude": ["node_modules", "dist", "tests", ".output"],
 	"include": ["src", "worker-configuration.d.ts", "vite.config.ts"]
