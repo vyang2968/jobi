@@ -1,5 +1,6 @@
 import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { createPrisma } from "@jobi/db";
 import { type AppContext, Task } from "../types";
 
 export class TaskCreate extends OpenAPIRoute {
@@ -37,19 +38,17 @@ export class TaskCreate extends OpenAPIRoute {
 		// Retrieve the validated request body
 		const taskToCreate = data.body;
 
-		// Implement your own object insertion here
+		const prisma = createPrisma(c.env.DB_BINDING);
+
+		const task = await prisma.task.create({
+			data: taskToCreate,
+		});
 
 		// return the new task
 		return c.json(
 			{
 				success: true,
-				task: {
-					name: taskToCreate.name,
-					slug: taskToCreate.slug,
-					description: taskToCreate.description,
-					completed: taskToCreate.completed,
-					due_date: taskToCreate.due_date,
-				},
+				task,
 			},
 			201,
 		);

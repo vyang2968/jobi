@@ -168,3 +168,10 @@ dist
 .env*
 !.env.example
 .wrangler/
+
+# Prisma generated client
+packages/db/src/generated/
+
+# local prisma dev database
+packages/db/prisma/db.sqlite
+packages/db/prisma/db.sqlite-journal

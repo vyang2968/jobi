@@ -1,5 +1,6 @@
 import { OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { createPrisma } from "@jobi/db";
 import { type AppContext, Task } from "../types";
 
 export class TaskList extends OpenAPIRoute {
@@ -37,26 +38,17 @@ export class TaskList extends OpenAPIRoute {
 		// Retrieve the validated parameters
 		const { page, isCompleted } = data.query;
 
-		// Implement your own object list here
+		const prisma = createPrisma(c.env.DB_BINDING);
+
+		const tasks = await prisma.task.findMany({
+			skip: page * 25,
+			take: 25,
+			where: isCompleted === undefined ? undefined : { completed: isCompleted },
+		});
 
 		return {
 			success: true,
-			tasks: [
-				{
-					name: "Clean my room",
-					slug: "clean-room",
-					description: undefined,
-					completed: false,
-					due_date: "2025-01-05",
-				},
-				{
-					name: "Build something awesome with Cloudflare Workers",
-					slug: "cloudflare-workers",
-					description: "Lorem Ipsum",
-					completed: true,
-					due_date: "2022-12-24",
-				},
-			],
+			tasks,
 		};
 	}
 }

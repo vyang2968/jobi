@@ -1,5 +1,6 @@
-import { OpenAPIRoute } from "chanfana";
+import { NotFoundException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { createPrisma } from "@jobi/db";
 import { type AppContext, Task } from "../types";
 
 export class TaskDelete extends OpenAPIRoute {
@@ -35,18 +36,24 @@ export class TaskDelete extends OpenAPIRoute {
 		// Retrieve the validated slug
 		const { taskSlug } = data.params;
 
-		// Implement your own object deletion here
+		const prisma = createPrisma(c.env.DB_BINDING);
+
+		const task = await prisma.task.findUnique({
+			where: { slug: taskSlug },
+		});
+
+		if (!task) {
+			throw new NotFoundException();
+		}
+
+		await prisma.task.delete({
+			where: { slug: taskSlug },
+		});
 
 		// Return the deleted task for confirmation
 		return {
 			result: {
-				task: {
-					name: "Build something awesome with Cloudflare Workers",
-					slug: taskSlug,
-					description: "Lorem Ipsum",
-					completed: true,
-					due_date: "2022-12-24",
-				},
+				task,
 			},
 			success: true,
 		};

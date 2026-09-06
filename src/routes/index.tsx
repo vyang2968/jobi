@@ -1,25 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+
+type Task = {
+	slug: string;
+	name: string;
+	description: string | null;
+	completed: boolean;
+	due_date: string | null;
+};
 
 const getTasks = createServerFn({
 	method: "GET",
 }).handler(async () => {
-	return [
-		{
-			name: "Clean my room",
-			slug: "clean-room",
-			description: undefined,
-			completed: false,
-			due_date: "2025-01-05",
-		},
-		{
-			name: "Build something awesome with Cloudflare Workers",
-			slug: "cloudflare-workers",
-			description: "Lorem Ipsum",
-			completed: true,
-			due_date: "2022-12-24",
-		},
-	];
+	const origin = new URL(getRequest().url).origin;
+	const res = await fetch(`${origin}/api/tasks`);
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch tasks");
+	}
+
+	const data = (await res.json()) as { success: boolean; tasks: Task[] };
+
+	return data.tasks;
 });
 
 export const Route = createFileRoute("/")({

@@ -1,5 +1,6 @@
 import { NotFoundException, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
+import { createPrisma } from "@jobi/db";
 import { type AppContext, Task } from "../types";
 
 export class TaskFetch extends OpenAPIRoute {
@@ -33,23 +34,19 @@ export class TaskFetch extends OpenAPIRoute {
 		// Retrieve the validated slug
 		const { taskSlug } = data.params;
 
-		// Implement your own object fetch here
+		const prisma = createPrisma(c.env.DB_BINDING);
 
-		const exists = true;
+		const task = await prisma.task.findUnique({
+			where: { slug: taskSlug },
+		});
 
-		if (!exists) {
+		if (!task) {
 			throw new NotFoundException();
 		}
 
 		return {
 			success: true,
-			task: {
-				name: "my task",
-				slug: taskSlug,
-				description: "this needs to be done",
-				completed: false,
-				due_date: new Date().toISOString().slice(0, 10),
-			},
+			task,
 		};
 	}
 }
